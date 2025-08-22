@@ -1,5 +1,5 @@
 {
-  "name": "sinple-hello-world-nodejs-app",
+  "name": "simple-hello-world-nodejs-app",
   "version": "1.0.0",
   "description": "A simple Hello World Node.js app",
   "main": "app.js",
