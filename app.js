@@ -1,14 +1,31 @@
 // Simple "Hello World" Node.js application
 
 const http = require('http');
+const https = require('https');
 
 const hostname = '127.0.0.1';
 const port = process.env.PORT || 3000;
 
+function fetchAzureFunction(callback) {
+  https.get('https://fun-based-on-app-service.azurewebsites.net/', (resp) => {
+    let data = '';
+    resp.on('data', (chunk) => { data += chunk; });
+    resp.on('end', () => { callback(null, data); });
+  }).on("error", (err) => {
+    callback(err);
+  });
+}
+
 const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World by TechWebDots 🎉:) \n');
+  fetchAzureFunction((err, azureResponse) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/plain');
+    if (err) {
+      res.end('Error calling Azure Function: ' + err.message);
+    } else {
+      res.end('Azure Function response: ' + azureResponse);
+    }
+  });
 });
 
 server.listen(port, hostname, () => {
