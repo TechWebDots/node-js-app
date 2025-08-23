@@ -7,7 +7,7 @@ const hostname = '127.0.0.1';
 const port = process.env.PORT || 3000;
 
 function fetchAzureFunction(callback) {
-  https.get('https://fun-based-on-app-service.azurewebsites.net/', (resp) => {
+  https.get('https://fun-based-on-app-service.azurewebsites.net/health', (resp) => {
     let data = '';
     resp.on('data', (chunk) => { data += chunk; });
     resp.on('end', () => { callback(null, data); });
@@ -23,7 +23,7 @@ const server = http.createServer((req, res) => {
     if (err) {
       res.end('Error calling Azure Function: ' + err.message);
     } else {
-      res.end('Azure Function response: ' + azureResponse);
+      res.end('Node JS app Calling Python Azure Function FastAPI; response coming as: ' + azureResponse);
     }
   });
 });
